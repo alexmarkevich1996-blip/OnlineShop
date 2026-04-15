@@ -1,20 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Repositories;
 
 namespace OnlineShop.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult Index(int id)
+        public string Index(int id)
         {
-            var products = new List<Product>()
-            {
-                new Product { Id = 1, Name = "T-Shirt", Cost = 12.3, Description = "Luxury shirt from Dolce&Gabana" },
-                new Product { Id = 2, Name = "Jacket", Cost = 24.0, Description = "Mind-blowing jacket from H&M"},
-                new Product { Id = 3, Name = "Sneackers shoes", Cost = 60.8, Description = "Elegant shoes from ECCO"}
-            };
+            var product = ProductsRepository.TryGetById(id);
 
-            var fetchedProduct = products.Where(p => p.Id == id);
-            return Content(string.Join(" ", fetchedProduct));
+            if (product == null)
+                return $"There is no product with id = {id} in the system";
+            else
+                return $"{product}{Environment.NewLine}{product.Description}";
         }
     }
 }

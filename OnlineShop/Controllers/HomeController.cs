@@ -7,17 +7,11 @@ namespace OnlineShop.Controllers
 {
     public class HomeController : Controller
     {
-        public string Index()
+        public IActionResult Index()
         {
             var products = ProductsRepository.GetAll();
-            var result = string.Empty;
 
-            foreach (var product in products)
-            {
-                result += product + Environment.NewLine + Environment.NewLine;
-            }
-
-            return result;
+            return View(products);
         }
 
     }

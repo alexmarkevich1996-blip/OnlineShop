@@ -4,24 +4,27 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
-    
-    @foreach(var product in Model)
-    {
-        <div class="col-3" mb="3">
-            <div class="card shadow">
-                <img class="card-img-top" src=@product.PhotoPath width="5%">
-                <div class="card-body text-center">
-                    <a class="text-success" href="/product/index/@product.Id">
-                    <h5>@product.Name</h5>
-                    </a>
-                    <h2 class="text-danger">@product.Cost.ToString("c")</h2>
-                    <a class="btn btn-success" href="#">Add to shopping cart</a>
+<div class="container">
+    <div class="row">
+        @foreach(var product in Model)
+        {
+            <div class="col-3" mb="3">
+                <div class="card shadow">
+                    <img class="card-img-top" src=@product.PhotoPath>
+                    <div class="card-body text-center">
+                        <a class="text-success" 
+                            asp-controller="product" 
+                            asp-action="index" 
+                            asp-route-id="@product.Id">
+                            <h5>@product.Name</h5>
+                        </a>
+                        <h2 class="text-danger">@product.Cost.ToString("c")</h2>
+                        <a class="btn btn-success" href="#">Add to shopping cart</a>
+
+                    </div>
 
                 </div>
-
             </div>
-        </div>
-    }
-
+        }
+    </div>
 </div>

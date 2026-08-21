@@ -1,19 +1,22 @@
-﻿using OnlineShop.Models;
+﻿using OnlineShop.Interfaces;
+using OnlineShop.Models;
 
 namespace OnlineShop.Repositories
 {
-    public static class CartsRepository
+    public class InMemoryCartsRepository : ICartsRepository
     {
-        private static readonly List<Cart> _carts = 
+
+        private readonly List<Cart> _carts = 
             [
                 
             ];
-        public static Cart? TryGetByUserId(string userId)
+
+        public Cart? TryGetByUserId(string userId)
         {
             return _carts.FirstOrDefault(cart => cart.UserId == userId);
         }
 
-        public static void Add(Product? product, string userId)
+        public void Add(Product? product, string userId)
         {
             var existingCart = TryGetByUserId(userId);
 
@@ -54,7 +57,34 @@ namespace OnlineShop.Repositories
                     existingCartItem.Quantity++;
                 }
             }
+        }
+        public void Subtract(int productId, string userId)
+        {
+            var existingCart = TryGetByUserId(userId);
+            var existingCartItem = existingCart.Items.FirstOrDefault(item => item.Product.Id == productId);
             
+            if(existingCartItem == null)
+            {
+                return;
+            }
+
+            existingCartItem.Quantity--;
+            
+            if(existingCartItem.Quantity == 0)
+            {
+                existingCart!.Items.Remove(existingCartItem);
+            }
+        }
+
+        public void Clear(string userId)
+        {
+            var existingCart = TryGetByUserId(userId);
+
+            if(existingCart != null)
+            {
+                _carts.Remove(existingCart);
+            }
+
         }
     }
 }

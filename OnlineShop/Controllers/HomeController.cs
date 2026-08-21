@@ -1,15 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Interfaces;
 using OnlineShop.Models;
-using OnlineShop.Repositories;
 using System.Diagnostics;
 
 namespace OnlineShop.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(IProductsRepository productsRepository) : Controller
     {
         public IActionResult Index()
         {
-            var products = ProductsRepository.GetAll();
+            var products = productsRepository.GetAll();
 
             return View(products);
         }

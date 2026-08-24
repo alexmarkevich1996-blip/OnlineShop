@@ -6,6 +6,6 @@
         public string UserId { get; set; }
         public List<CartItem> Items { get; set; }
         public decimal TotalCost => Items.Sum(x => x.Cost);
-
+        public int Quantity => Items.Sum(x => x.Quantity);
     }
 }

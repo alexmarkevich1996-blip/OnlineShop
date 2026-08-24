@@ -13,6 +13,7 @@ namespace OnlineShop.Controllers
             return View(cart);
         }
 
+        [HttpPost]
         public IActionResult Buy()
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);

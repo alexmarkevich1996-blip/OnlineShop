@@ -16,6 +16,7 @@ namespace OnlineShop.Controllers
         public IActionResult Add(int productId)
         {
             var product = productsRepository.TryGetById(productId);
+
             if (product != null)
             {
                 cartsRepository.Add(product, Constants.UserId);
@@ -34,6 +35,7 @@ namespace OnlineShop.Controllers
         public IActionResult Clear()
         {
             cartsRepository.Clear(Constants.UserId);
+
             return RedirectToAction("Index");
         }
     }

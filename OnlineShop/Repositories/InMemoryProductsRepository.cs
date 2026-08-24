@@ -12,14 +12,14 @@ namespace OnlineShop.Repositories
         {
             _products =
             [
-                new Product(++_instanceCounter, "T-Shirt", 1000, "Luxury shirt from Dolce&Gabana"),
-                new Product(++_instanceCounter, "Jacket", 2000, "Mind-blowing jacket from H&M"),
-                new Product(++_instanceCounter, "Sneackers shoes", 3500, "Elegant shoes from ECCO"),
-                new Product(++_instanceCounter, "Trousers", 5000, "Amazing trousers from Beneton"),
-                new Product(++_instanceCounter, "T-Shirt", 1000, "Luxury shirt from Dolce&Gabana"),
-                new Product(++_instanceCounter, "Jacket", 2000, "Mind-blowing jacket from H&M"),
-                new Product(++_instanceCounter, "Sneackers shoes", 3500, "Elegant shoes from ECCO"),
-                new Product(++_instanceCounter, "Trousers", 5000, "Amazing trousers from Beneton")
+                new Product(++_instanceCounter, "T-Shirt Dolce", 1000, "Luxury shirt from Dolce&Gabana"),
+                new Product(++_instanceCounter, "Jacket H&M", 2000, "Mind-blowing jacket from H&M"),
+                new Product(++_instanceCounter, "Sneackers shoes ECCO", 3500, "Elegant shoes from ECCO"),
+                new Product(++_instanceCounter, "Trousers Benetor", 5000, "Amazing trousers from Beneton"),
+                new Product(++_instanceCounter, "T-Shirt Addidas", 8500, "Luxury shirt from Addidas"),
+                new Product(++_instanceCounter, "Jacket Nike", 2000, "Mind-blowing jacket from Nike"),
+                new Product(++_instanceCounter, "Sneackers shoes Nike", 3500, "Elegant shoes from Nike"),
+                new Product(++_instanceCounter, "Trousers Addidas", 5000, "Amazing trousers from Addidas")
             ];
         }
         public List<Product> GetAll() => _products;

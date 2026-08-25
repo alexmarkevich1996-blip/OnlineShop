@@ -22,16 +22,24 @@
                         <tr>
                             <td class="w-50 p-4">
                                 <p>
-                                    <label>Name</label><br />
-                                    <input type="text" class="w-100" name="name"/>
+                                    <label class="form-label">Name</label><br />
+                                    <input type="text" class="form-control" placeholder="Ivanov" name="name"/>
                                 </p>
                                 <p>
-                                    <label>Delivery Address</label><br />
-                                    <input type="text" class="w-100" name="address"/>
+                                    <labe class ="form-label">Delivery Address</labe><br />
+                                    <input type="text" class="form-control" placeholder="St Petersburg, Kosygina st., 25-117" name="address"/>
                                 </p>
                                 <p>
-                                    <label>Phone Number</label><br />
-                                    <input type="tel" class="w-100" name="phone" />
+                                    <label class="form-label">Phone Number</label><br />
+                                    <input type="tel" class="form-control" placeholder="+7 (__)___-__-__" name="phone" />
+                                </p>
+                                <p>
+                                    <label class="form-label">Delivery Date</label><br />
+                                    <input type="date" class="form-control" pattern="\d{2}\.d{2}\.\d{4}" placeholder="01.01.1900" name="date" />
+                                </p>
+                                <p>
+                                    <label class="form-label">Comment</label><br />
+                                    <textarea class="form-control" placeholder="Comment" name="comment"></textarea>
                                 </p>
                             </td>
 

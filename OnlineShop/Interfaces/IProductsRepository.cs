@@ -7,7 +7,10 @@ namespace OnlineShop.Interfaces
 
         List<Product> GetAll();
         Product? TryGetById(int id);
-        void Add(string name, decimal cost, string description);
+        List<Product>? Search(string? query);
+        void Add(Product product);
+        void Edit(Product product);
+        void Delete(int id);
 
     }
 }

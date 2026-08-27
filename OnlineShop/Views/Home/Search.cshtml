@@ -1,0 +1,20 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Главная";
+}
+
+@await Html.PartialAsync("_SearchBlock")
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Products that match your search</h2>
+</div>
+
+@await Html.PartialAsync("_ProductCatalog", Model)
+
+<div class="text-center m-5">
+    <a class="btn btn-outline-success"
+       asp-controller="Home"
+       asp-action="Index">
+        View the entire product catalog
+    </a>
+</div>

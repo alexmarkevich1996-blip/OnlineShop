@@ -29,10 +29,43 @@ namespace OnlineShop.Repositories
             return _products.FirstOrDefault(p => p.Id == id);
         }
 
-        public void Add(string name, decimal cost, string description)
+
+        public void Edit(Product product)
         {
-            var newProduct = new Product(++_instanceCounter, name, cost, description);
-            _products.Add(newProduct);
+            var originalProduct = TryGetById(product.Id);
+
+            if(product != null)
+            {
+                originalProduct.Name = product.Name;
+                originalProduct.Cost = product.Cost;
+                originalProduct.Description = product.Description;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            var product = TryGetById(id);
+
+            if(product is not null)
+            {
+                _products.Remove(product);
+            }
+            
+        }
+
+        public void Add(Product product)
+        {
+            product.Id = ++_instanceCounter;
+            _products.Add(product);
+        }
+
+        public List<Product>? Search(string? query)
+        {
+            if (query is null)
+            {
+                return [];
+            }
+            return _products.Where(x => x.Name.Contains(query, StringComparison.OrdinalIgnoreCase))?.ToList() ?? [];
         }
     }
 }

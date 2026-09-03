@@ -1,4 +1,4 @@
-﻿
+﻿@model Registration
 @{
     ViewData["Title"] = "User Registration";
 }
@@ -9,17 +9,33 @@
 <form method="post">
     <div class="row justify-content-center mt-3">
         <div class="col-6 mb-3">
+            
+            <div class="text-danger fw-bold text-uppercase" asp-validation-summary="All"></div>
+
             <p>
-                <label class="form-label">Login</label><br />
-                <input class="form-control" placeholder="Your Login" required name="login" />
+                <label class="form-label" asp-for="Name"></label>
+                <input class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name"></span>
             </p>
             <p>
-                <label class="form-label">Password</label><br />
-                <input class="form-control" placeholder="Your password" required name="password" />
+                <label class="form-label" asp-for="Age"></label>
+                <input class="form-control" asp-for="Age" />
+                <span asp-validation-for="Age"></span>
             </p>
             <p>
-                <label class="form-label">Confirm password</label><br />
-                <input class="form-control" placeholder="Confirm password" required name="confirmpassword" />
+                <label class="form-label" asp-for="Login"></label>
+                <input class="form-control" asp-for="Login" />
+                <span asp-validation-for="Login"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="Password"></label>
+                <input class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="ConfirmPassword"></label>
+                <input class="form-control" asp-for="ConfirmPassword" />
+                <span asp-validation-for="ConfirmPassword"></span>
             </p>
         </div>
     </div>
@@ -27,7 +43,7 @@
         <button class="btn btn-outline-success" type="submit"
                 asp-controller="Account"
                 asp-action="Registration">
-            Register
+            Registration
         </button>
     </div>
 </form>

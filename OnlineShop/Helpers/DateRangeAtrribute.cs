@@ -1,0 +1,34 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OnlineShop.Helpers
+{
+    public class DateRangeAtrribute : ValidationAttribute
+    {
+        private readonly DateOnly minDate;
+        private readonly DateOnly maxDate;
+
+        public DateRangeAtrribute()
+        {
+            minDate = DateOnly.FromDateTime(DateTime.Now);
+            maxDate = DateOnly.FromDateTime(DateTime.Now.AddMonths(3));
+
+            if (string.IsNullOrEmpty(ErrorMessage))
+            {
+                ErrorMessage = $"Date should be from {minDate.ToShortDateString()} to {maxDate.ToShortDateString()}";
+            }
+        }
+
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+        {
+            if (value == null)
+                return new ValidationResult(ErrorMessage);
+
+            var date = DateOnly.FromDateTime((DateTime)value);
+
+            if(date < minDate || date > maxDate)
+                return new ValidationResult(ErrorMessage);
+
+            return ValidationResult.Success;
+        }
+    }
+}

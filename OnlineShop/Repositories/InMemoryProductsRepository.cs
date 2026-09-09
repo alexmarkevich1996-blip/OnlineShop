@@ -32,13 +32,13 @@ namespace OnlineShop.Repositories
 
         public void Edit(Product product)
         {
-            var originalProduct = TryGetById(product.Id);
+            var existingProduct = TryGetById(product.Id);
 
-            if(product != null)
+            if(existingProduct != null)
             {
-                originalProduct.Name = product.Name;
-                originalProduct.Cost = product.Cost;
-                originalProduct.Description = product.Description;
+                existingProduct.Name = product.Name;
+                existingProduct.Cost = product.Cost;
+                existingProduct.Description = product.Description;
             }
         }
 

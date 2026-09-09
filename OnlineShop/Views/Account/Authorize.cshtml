@@ -1,4 +1,6 @@
-﻿@model Authorization
+﻿@using OnlineShop.Models
+
+@model Authorization
 @{
     ViewData["Title"] = "User Authorization";
 }
@@ -32,14 +34,14 @@
     <div class="text-center m-3">
         <button class="btn btn-outline-success" type="submit"
                 asp-controller="Account"
-                asp-action="Authorization">
+                asp-action="Authorize">
             Log In
         </button>
     </div>
     <div class="text-center m-3">
         <a class="btn text-decoration-underline"
            asp-controller="Account"
-           asp-action="Registration">
+           asp-action="Register">
             New User Registration
         </a>
     </div>

@@ -8,6 +8,10 @@ namespace OnlineShop.Models
         [StringLength(25, MinimumLength = 2, ErrorMessage = "The length should be from {2} to {1} symbols")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Surname not specified")]
+        [StringLength(25, MinimumLength = 2, ErrorMessage = "The length should be from {2} to {1} symbols")]
+        public string Surname { get; set; }
+
         [Display(Name = "Age", Prompt = "Your age")]
         [Required(ErrorMessage = "Age not specified")]
         [Range(16, 100, ErrorMessage = "Age should be from {1} to {2} years")]
@@ -19,8 +23,8 @@ namespace OnlineShop.Models
         [DataType(DataType.EmailAddress)]
         public string Login { get; set; }
 
-        [Required(ErrorMessage = "Phone number not specified")]
-        [RegularExpression(@"\d{4}-\d{3}-\d{4}")]
+        [Display(Name = "Phone", Prompt = "Your phone")]
+        [Required(ErrorMessage = "Phone not specified")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Password not specified")]

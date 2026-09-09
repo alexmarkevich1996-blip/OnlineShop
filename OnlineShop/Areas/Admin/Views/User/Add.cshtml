@@ -1,0 +1,56 @@
+﻿@model UserAccount
+@{
+    ViewData["Title"] = "Add new user";
+}
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Add new user</h2>
+</div>
+
+<form method="post">
+    <div class="row justify-content-center mt-3">
+        <div class="col-6 mb-3">
+            <div class="text-danger fw-bold text-uppercase" asp-validation-summary="All"></div>
+            <p>
+                <label class="form-label" asp-for="Login"></label><br />
+                <input class="form-control" asp-for="Login" />
+                <span asp-validation-for="Login"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="Name"></label><br />
+                <input class="form-control" asp-for="Name" />
+                <span asp-validation-for="Name"></span>
+
+            </p>
+            <p>
+                <label class="form-label" asp-for="Surname"></label><br />
+                <input class="form-control" asp-for="Surname" />
+                <span asp-validation-for="Surname"></span>
+
+            </p>
+            <p>
+                <label class="form-label" asp-for="Age"></label><br />
+                <input class="form-control" asp-for="Age" />
+                <span asp-validation-for="Age"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="Phone"></label><br />
+                <input class="form-control" asp-for="Phone" />
+                <span asp-validation-for="Phone"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="Password"></label><br />
+                <input class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
+            </p>
+        </div>
+    </div>
+    <div class="text-center m-3">
+        <button class="btn btn-outline-success" type="submit"
+            asp-area="Admin"
+            asp-controller="User"
+            asp-action="Add">
+            Add
+        </button>
+    </div>
+</form>

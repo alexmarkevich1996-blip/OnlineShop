@@ -1,0 +1,108 @@
+﻿@model UserAccount
+@{
+    ViewData["Title"] = "User Detail";
+}
+
+<div class="row mt-3">
+    @await Html.PartialAsync("SideBar")
+
+
+    <div class="col-9 mb-3">
+        <div class="text-center text-uppercase text-success mb-5 mt-5">
+            <h2 class="row-title">User Detail</h2>
+        </div>
+        <form method="post">
+
+            @if (Model != null)
+            {
+                <input type="hidden" name="Id" value="@Model.Id" />
+
+                <div class="text-end mt-5">
+                    <button class="btn btn-outline-success dropdown-toggle" role="button" id="dropdownMenuButton" data-toggle="dropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        Actions
+                    </button>
+                    <ul class="dropdown-menu list-group-item-success" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area="Admin"
+                               asp-controller="User"
+                               asp-action="ChangePassword"
+                               asp-route-login="@Model.Login">
+                                Change user password
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area="Admin"
+                               asp-controller="User"
+                               asp-action="Edit"
+                               asp-route-login="@Model.Login">
+                                Edit user data
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area="Admin"
+                               asp-controller="User"
+                               asp-action="EditRights"
+                               asp-route-login="@Model.Login">
+                                Edit user rights
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item"
+                               asp-area="Admin"
+                               asp-controller="User"
+                               asp-action="Delete"
+                               asp-route-login="@Model.Login">
+                                Delete user
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <table class="table table-hover">
+                    <tr>
+                        <td><span>ID</span></td>
+                        <td>@Model.Id</td>
+                    </tr>
+                    <tr>
+                        <td><span>Email (login)</span></td>
+                        <td class="fw-bold">@Model.Login</td>
+                    </tr>
+                    <tr>
+                        <td><span>Name</span></td>
+                        <td>@Model.Name</td>
+                    </tr>
+                    <tr>
+                        <td><span>Surname</span></td>
+                        <td>@Model.Surname</td>
+                    </tr>
+                    <tr>
+                        <td><span>Phone</span></td>
+                        <td>@Model.Phone</td>
+                    </tr>
+                    <tr>
+                        <td><span>Age</span></td>
+                        <td>@Model.Age</td>
+                    </tr>
+                    <tr>
+                        <td><span>Role</span></td>
+                        <td>ПРАВА_ДОСТУПА_ПОЛЬЗОВАТЕЛЯ</td>
+                    </tr>
+                    <tr>
+                        <td class="w-25"><span>Registration date</span></td>
+                        <td class="w-auto">@Model.CreationDateTime</td>
+                    </tr>
+                </table>
+            }
+            else
+            {
+                <div class="text-center">
+                    <h2>There is no user in the repository!</h2>
+                </div>
+            }
+        </form>
+    </div>
+</div>

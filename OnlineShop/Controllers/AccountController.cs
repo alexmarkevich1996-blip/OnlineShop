@@ -1,46 +1,79 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Models;
+using OnlineShop.Repositories;
 
 namespace OnlineShop.Controllers
 {
     public class AccountController : Controller
     {
-        public IActionResult Authorization()
+        private readonly IUsersRepository usersManager;
+
+        public AccountController(IUsersRepository usersManager)
         {
+            this.usersManager = usersManager;
+        }
+
+        public IActionResult Authorize()
+        {
+
             return View();
         }
 
         [HttpPost]
-        public IActionResult Authorization(Authorization authorization)
+        public IActionResult Authorize(Authorization authorization)
         {
-            if (authorization.Login == authorization.Password)
-                ModelState.AddModelError("", "Login and password should not match");
 
             if (!ModelState.IsValid)
-                return View(authorization);
+                return RedirectToAction(nameof(Authorize));
 
-            return RedirectToAction(nameof(Index), "Home");
+            var userAccount = usersManager.TryGetByLogin(authorization.Login);
+
+            if (userAccount == null)
+            {
+                ModelState.AddModelError("", "That users doesn't exist");
+                return RedirectToAction(nameof(Authorize));
+            }
+
+            if (userAccount.Password != authorization.Password)
+            {
+                ModelState.AddModelError("", "Incorrect password");
+                return RedirectToAction(nameof(Authorize));
+            }
+
+            return RedirectToAction(nameof(HomeController.Index), "Home");
+
+
         }
 
-        public IActionResult Registration()
+        public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Registration(Registration registration)
+        public IActionResult Register(Registration registration)
         {
             if(registration.Login == registration.Password)
             {
                 ModelState.AddModelError("", "Login and password should not match");
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View(registration);
+                usersManager.Add(new UserAccount
+                {
+                    Name = registration.Name,
+                    Surname = registration.Surname,
+                    Age = registration.Age,
+                    Phone = registration.Phone,
+                    Password = registration.Password,
+                    Login = registration.Login
+                });
+
+                return RedirectToAction(nameof(HomeController.Index), "Home");
             }
 
-            return RedirectToAction("Success");
+            return RedirectToAction(nameof(Register));
         }
 
         public IActionResult Success()

@@ -10,25 +10,25 @@ namespace OnlineShop.Controllers
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
 
-            return View(cart);
+            var order = new Order
+            {
+                Items = cart?.Items ?? []
+            };
+
+            return View(order);
         }
 
         [HttpPost]
-        public IActionResult Buy(DeliveryUser deliveryUser)
+        public IActionResult Buy(Order order)
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
 
             if(cart is null)
             {
-                return RedirectToAction("Index", "Home");
+                return View(nameof(Index), order); 
             }
-
-            var order = new Order()
-            {
-                UserId = Constants.UserId,
-                Items = cart.Items,
-                DeliveryUser = deliveryUser
-            };
+            order.UserId = Constants.UserId;
+            order.Items = cart.Items;
 
             ordersRepository.Add(order);
             cartsRepository.Clear(Constants.UserId);

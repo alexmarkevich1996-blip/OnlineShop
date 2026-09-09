@@ -1,0 +1,153 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="row mt-3">
+    @await Html.PartialAsync("SideBar")
+
+
+    <div class="col-9 mb-3">
+        <div class="text-center text-uppercase text-success mb-5 mt-5">
+            <h2 class="row-title">Order Deails</h2>
+        </div>
+        <form method="post">
+
+            @if (Model != null)
+            {
+                <input type="hidden" name="Id" value="@Model.Id" />
+
+                <table class="table table-responsive mb-5 caption-top">
+                    <tr>
+                        <td class="fw-bold border-end border-bottom border-dark">Order</td>
+                        <td class="border-bottom border-dark">
+
+                            <table class="table table-hover">
+                                <tr>
+                                    <td class="w-25"><span>ID</span></td>
+                                    <td class="w-auto">@Model.Id</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Total Cost</span></td>
+                                    <td class="fw-bold w-auto">@Model.TotalCost?.ToString("c")</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Number of items</span></td>
+                                    <td class="w-auto">@Model.Items.Count</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Quantity of items</span></td>
+                                    <td class="w-auto">@Model.ItemsQuantity</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Order status</span></td>
+                                    <td class="w-auto">
+                                        <p>
+                                            <select asp-for="@Model.Status"
+                                                    class="form-select list-group-item-success w-50"
+                                                    asp-items="@Html.GetEnumSelectList<OrderStatus>()">
+                                            </select>
+                                        </p>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Order creation time</span></td>
+                                    <td class="w-auto">@Model.CreationDateTime</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold border-end border-bottom border-dark">User</td>
+                        <td class="border-bottom border-dark">
+                            <table class="table table-hover">
+                                <tr>
+                                    <td class="w-25"><span>ID</span></td>
+                                    <td class="w-auto">@Model.UserId</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold border-end border-bottom border-dark">Buyer</td>
+                        <td class="border-bottom border-dark">
+                            <table class="table table-hover p-0 m-0">
+                                <tr>
+                                    <td class="w-25"><span>ID</span></td>
+                                    <td class="w-auto">@Model.DeliveryUser.Id</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Name</span></td>
+                                    <td class="w-auto">@Model.DeliveryUser.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Phone</span></td>
+                                    <td class="w-auto">@Model.DeliveryUser.Phone</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Address</span></td>
+                                    <td class="w-auto">@Model.DeliveryUser.Address</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Date of delivery</span></td>
+                                    <td class="w-auto">@Model.DeliveryUser.Date.ToShortDateString()</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><span>Comments</span></td>
+                                    <td class="w-auto">@Model.DeliveryUser.Comment</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold border-end border-dark">Order details</td>
+                        <td class="border-bottom border-dark">
+                            <table class="table table-responsive table-striped table-hover caption-top">
+                                <thead>
+                                    <tr align="center">
+                                        <th scope="col">#</th>
+                                        <th scope="col">Product name</th>
+                                        <th scope="col">Price, usd</th>
+                                        <th scope="col">Quantity, num.</th>
+                                        <th scope="col">Total Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (var i = 0; i < Model.Items.Count; i++)
+                                    {
+                                        <tr align="center" class="align-baseline">
+                                            <td class="fw-bold">@(i + 1)</td>
+                                            <td align="left">@Model.Items[i].Product.Name</td>
+                                            <td align="left">
+                                                @Model.Items[i].Product.Cost.ToString("c")
+                                            </td>
+                                            <td>@Model.Items[i].Quantity</td>
+                                            <td class="fw-bold">@Model.Items[i].Cost.ToString("c")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="text-center mt-5">
+                    <button class="btn btn-outline-success" type="submit"
+                            asp-area="Admin"
+                            asp-controller="Order"
+                            asp-action="UpdateStatus"
+                            asp-route-orderId=@Model.Id>
+                        Update status
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="text-center">
+                    <h2>Such order is not exist!</h2>
+                </div>
+            }
+        </form>
+    </div>
+</div>

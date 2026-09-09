@@ -18,9 +18,19 @@
                 <span asp-validation-for="Name"></span>
             </p>
             <p>
+                <label class="form-label" asp-for="Surname"></label>
+                <input class="form-control" asp-for="Surname" />
+                <span asp-validation-for="Surname"></span>
+            </p>
+            <p>
                 <label class="form-label" asp-for="Age"></label>
                 <input class="form-control" asp-for="Age" />
                 <span asp-validation-for="Age"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="Phone"></label>
+                <input class="form-control" asp-for="Phone" />
+                <span asp-validation-for="Phone"></span>
             </p>
             <p>
                 <label class="form-label" asp-for="Login"></label>
@@ -42,7 +52,7 @@
     <div class="text-center m-3">
         <button class="btn btn-outline-success" type="submit"
                 asp-controller="Account"
-                asp-action="Registration">
+                asp-action="Register">
             Registration
         </button>
     </div>

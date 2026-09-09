@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Localization;
 using OnlineShop.Interfaces;
 using OnlineShop.Repositories;
+using Serilog;
+using System.Globalization;
 
 namespace OnlineShop
 {
@@ -7,38 +10,21 @@ namespace OnlineShop
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddSingleton<ICartsRepository, InMemoryCartsRepository>();
-            builder.Services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
-            builder.Services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
-            builder.Services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
-            builder.Services.AddSingleton<IComparisonsRepository, InMemoryComparisonsRepository>();
-
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.MapStaticAssets();
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
-
-            app.Run();
+            CreateHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .UseSerilog((hostingContext, loggerConfiguration) =>
+            {
+                loggerConfiguration
+                    .ReadFrom.Configuration(hostingContext.Configuration)
+                    .Enrich.FromLogContext()
+                    .Enrich.WithProperty("ApplicationName", "Online Shop");
+            })
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

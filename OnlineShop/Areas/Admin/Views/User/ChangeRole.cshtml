@@ -1,0 +1,28 @@
+﻿@model ТИП_ДАННЫХ
+@{
+    ViewData["Title"] = "Смена прав доступа пользователя";
+}
+
+<div class="text-center text-uppercase text-success mb-5 mt-5">
+    <h2 class="row-title">Смена прав доступа пользователя</h2>
+</div>
+
+<form method="post">
+    <div class="row justify-content-center mt-3">
+        <div class="col-6 mb-3">
+            <div class="text-danger fw-bold text-uppercase" asp-validation-summary="ВСЕ_ОШИБКИ"></div>
+            <input type="hidden" name="ИМЯ_СВОЙСТВА_КЛАССА_МОДЕЛИ" value="LOGIN_ПОЛЬЗОВАТЕЛЯ" />
+            <input type="hidden" name="ИМЯ_СВОЙСТВА_КЛАССА_МОДЕЛИ" value="ROLES_ПОЛЬЗОВАТЕЛЯ" />
+            <p class="text-center">
+                <select asp-for="ROLE_ПОЛЬЗОВАТЕЛЯ" class="form-select list-group-item-success"
+                        asp-items="ROLES_ПОЛЬЗОВАТЕЛЯ">
+                </select>
+            </p>
+        </div>
+    </div>
+    <div class="text-center m-3">
+        <button class="btn btn-outline-success" type="ОТПРАВКА_ДАННЫХ_ФОРМЫ">
+            Обновить
+        </button>
+    </div>
+</form>

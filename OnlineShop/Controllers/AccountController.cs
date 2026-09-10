@@ -60,7 +60,7 @@ namespace OnlineShop.Controllers
 
             if (ModelState.IsValid)
             {
-                usersManager.Add(new UserAccount
+                usersManager.Add(new User
                 {
                     Name = registration.Name,
                     Surname = registration.Surname,

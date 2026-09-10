@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.Areas.Admin.Models;
 using OnlineShop.Interfaces;
 using OnlineShop.Models;
@@ -7,7 +8,7 @@ using OnlineShop.Repositories;
 namespace OnlineShop.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class UserController(IUsersRepository usersRepository) : Controller
+    public class UserController(IUsersRepository usersRepository, IRolesRepository rolesRepository) : Controller
     {
         public IActionResult Index()
         {
@@ -27,8 +28,11 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(UserAccount user)
+        public IActionResult Add(User user)
         {
+            if (usersRepository.TryGetByLogin(user.Login) != null)
+                ModelState.AddModelError("", "That user already exists!");
+
             if (!ModelState.IsValid)
                 return View(user);
 
@@ -45,14 +49,14 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(UserAccount user)
+        public IActionResult Edit(User user)
         {
             if (!ModelState.IsValid)
                 return View(user);
 
             usersRepository.Edit(user);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Detail), new { login = user.Login });
         }
 
         public IActionResult ChangePassword(string login)
@@ -82,7 +86,7 @@ namespace OnlineShop.Areas.Admin.Controllers
 
             usersRepository.ChangePassword(changedPassword);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Detail), new { login = changedPassword.Login });
         }
 
         public IActionResult Delete(string login)
@@ -92,11 +96,37 @@ namespace OnlineShop.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult EditRights(string login)
+        public IActionResult ChangeRole(string login)
         {
-            var user = usersRepository.TryGetByLogin(login);
+            var existingUser = usersRepository.TryGetByLogin(login);
 
-            return View();
+            var changeRole = new ChangeRole()
+            {
+                Login = existingUser?.Login,
+                Role = existingUser?.Role?.ToString(),
+                Roles = rolesRepository
+                    .GetAll()
+                    .Select(role => new SelectListItem()
+                        {
+                            Value = role.Name.ToString(),
+                            Text = role.Name
+                        })
+                    .ToList()
+
+            };
+
+            return View(changeRole);
+        }
+
+        [HttpPost]
+        public IActionResult ChangeRole(ChangeRole changeRole)
+        {
+            if (!ModelState.IsValid)
+                return View(changeRole);
+
+            usersRepository.ChangeRole(changeRole.Login, rolesRepository.TryGetByName(changeRole.Role));
+
+            return RedirectToAction(nameof(Detail), new { login = changeRole.Login });
         }
 
     }

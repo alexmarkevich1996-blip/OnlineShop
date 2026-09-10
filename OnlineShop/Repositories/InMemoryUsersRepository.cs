@@ -1,29 +1,32 @@
-﻿using OnlineShop.Models;
+﻿using OnlineShop.Areas.Admin.Models;
+using OnlineShop.Interfaces;
+using OnlineShop.Models;
 
 namespace OnlineShop.Repositories
 {
-    public class InMemoryUsersRepository : IUsersRepository
+    public class InMemoryUsersRepository(IRolesRepository rolesRepository) : IUsersRepository
     {
-        private readonly List<UserAccount> users = new List<UserAccount>();
+        private readonly List<User> users = new List<User>();
 
-        public List<UserAccount> GetAll()
+        public List<User> GetAll()
         {
             return users;
         }
 
-        public UserAccount? TryGetByLogin(string login)
+        public User? TryGetByLogin(string login)
         {
             return users?.FirstOrDefault(u => u.Login == login);
         }
 
-        public void Add(UserAccount user)
+        public void Add(User user)
         {
             user.Id = Guid.NewGuid();
+            user.Role = rolesRepository.TryGetByName("User");
             user.CreationDateTime = DateTime.Now;
             users.Add(user);
         }
 
-        public void Edit(UserAccount user)
+        public void Edit(User user)
         {
             var existingUser = TryGetByLogin(user.Login);
 
@@ -53,6 +56,16 @@ namespace OnlineShop.Repositories
             if(existingUser != null)
             {
                 users.Remove(existingUser);
+            }
+        }
+
+        public void ChangeRole(string login, Role? newRole)
+        {
+            var existingUser = TryGetByLogin(login);
+
+            if(existingUser != null)
+            {
+                existingUser.Role = newRole;
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿@model UserAccount
+﻿@model User
 @{
     ViewData["Title"] = "User Detail";
 }
@@ -45,7 +45,7 @@
                             <a class="dropdown-item"
                                asp-area="Admin"
                                asp-controller="User"
-                               asp-action="EditRights"
+                               asp-action="ChangeRole"
                                asp-route-login="@Model.Login">
                                 Edit user rights
                             </a>
@@ -89,7 +89,7 @@
                     </tr>
                     <tr>
                         <td><span>Role</span></td>
-                        <td>ПРАВА_ДОСТУПА_ПОЛЬЗОВАТЕЛЯ</td>
+                        <td>@Model.Role?.Name</td>
                     </tr>
                     <tr>
                         <td class="w-25"><span>Registration date</span></td>

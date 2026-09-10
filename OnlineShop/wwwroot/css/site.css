@@ -29,3 +29,31 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.admin-sidebar {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+}
+
+.admin-nav-link {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+
+    color: #343a40;
+    text-decoration: none;
+
+    transition: background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.admin-nav-link:hover {
+    background-color: #f1f3f5;
+    color: #198754;
+}
+
+.admin-nav-link.active {
+    background-color: #198754;
+    color: white;
+    font-weight: 600;
+}

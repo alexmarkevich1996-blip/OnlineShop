@@ -52,11 +52,10 @@
                         </li>
                         <li>
                             <a class="dropdown-item"
-                               asp-area="Admin"
-                               asp-controller="User"
-                               asp-action="Delete"
-                               asp-route-login="@Model.Login">
-                                Delete user
+                               href="#"
+                               data-bs-toggle="modal"
+                               data-bs-target="#deleteModal-product-@Model.Id">
+                                Delete
                             </a>
                         </li>
                     </ul>
@@ -96,6 +95,12 @@
                         <td class="w-auto">@Model.CreationDateTime</td>
                     </tr>
                 </table>
+                @await Html.PartialAsync("_DeleteConfirmModal", new DeleteConfirmModalModel
+                {
+                    ModalId = $"deleteModal-product-{Model.Id}",
+                    Message = $"Are you sure you want to delete product \"{Model.Name}\"?",
+                    DeleteUrl = Url.Action("Delete", "User", new { area = "Admin", login = Model.Login })
+                })
             }
             else
             {

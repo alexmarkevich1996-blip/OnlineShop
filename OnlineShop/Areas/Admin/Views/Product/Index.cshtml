@@ -57,13 +57,12 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a class="btn btn-outline-success"
-                                           asp-area="Admin"
-                                           asp-controller="Product"
-                                           asp-action="Delete"
-                                           asp-route-Id="@Model[i].Id">
+                                        <button type="button"
+                                                class="btn btn-outline-success"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteModal-product-@Model[i].Id">
                                             Delete
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             }
@@ -77,6 +76,15 @@
                             </tr>
                         </tfoot>
                     </table>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        @await Html.PartialAsync("_DeleteConfirmModal", new DeleteConfirmModalModel
+                        {
+                            ModalId = $"deleteModal-product-{Model[i].Id}",
+                            Message = $"Are you sure you want to delete product \"{Model[i].Name}\"?",
+                            DeleteUrl = Url.Action("Delete", "Product", new { area = "Admin", Id = Model[i].Id })
+                        })
+                    }
                 </div>
             </div>
         }

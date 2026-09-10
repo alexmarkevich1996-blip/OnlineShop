@@ -37,7 +37,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult DeleteRole(Guid roleId)
+        public IActionResult Delete(Guid roleId)
         {
             rolesRepository.Delete(roleId);
 

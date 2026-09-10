@@ -1,39 +1,56 @@
-﻿
-<div class="col-3 mb-3 min">
-    <div class="sidebar">
-        <ul class="sidebar-nav">
-            <li class="nav-link">
-                <a class="nav-link"
-                   asp-area="Admin"
-                   asp-controller="Order"
-                   asp-action="Index">
-                    Orders
-                </a>
-            </li>
-            <li class="nav-link">
-                <a class="nav-link"
-                   asp-area="Admin"
-                   asp-controller="User"
-                   asp-action="Index">
-                    Users
-                </a>
-            </li>
-            <li class="nav-link">
-                <a class="nav-link"
-                   asp-area="Admin"
-                   asp-controller="Role"
-                   asp-action="Index">
-                    Roles
-                </a>
-            </li>
-            <li class="nav-link">
-                <a class="nav-link"
-                   asp-area="Admin"
-                   asp-controller="Product"
-                   asp-action="Index">
-                    Products
-                </a>
-            </li>
-        </ul>
-    </div>
+﻿@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<div class="col-3 mb-3">
+    <aside class="admin-sidebar shadow-sm rounded-3 p-3">
+
+        <div class="mb-4">
+            <h5 class="mb-1">Admin Panel</h5>
+            <small class="text-muted">Management</small>
+        </div>
+
+        <nav>
+            <ul class="nav flex-column gap-2">
+
+                <li class="nav-item">
+                    <a class="admin-nav-link @(currentController == "Order" ? "active" : "")"
+                       asp-area="Admin"
+                       asp-controller="Order"
+                       asp-action="Index">
+                        Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="admin-nav-link @(currentController == "User" ? "active" : "")"
+                       asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Index">
+                        Users
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="admin-nav-link @(currentController == "Role" ? "active" : "")"
+                       asp-area="Admin"
+                       asp-controller="Role"
+                       asp-action="Index">
+                        Roles
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="admin-nav-link @(currentController == "Product" ? "active" : "")"
+                       asp-area="Admin"
+                       asp-controller="Product"
+                       asp-action="Index">
+                        Products
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+    </aside>
 </div>

@@ -4,7 +4,7 @@ namespace OnlineShop.Core.Models
 {
     public class Product
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Product Name", Prompt = "Product name")]
         [Required(ErrorMessage = "Product name not specified")]
@@ -27,7 +27,7 @@ namespace OnlineShop.Core.Models
         
         public Product() { }
 
-        public Product(int id, string name, decimal cost, string? description)
+        public Product(Guid id, string name, decimal cost, string? description)
         {
             Id = id;
             Name = name;

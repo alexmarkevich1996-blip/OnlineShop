@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace OnlineShop.Core.Models
+namespace OnlineShop.Core.DTO
 {
     public class ChangedPassword
     {

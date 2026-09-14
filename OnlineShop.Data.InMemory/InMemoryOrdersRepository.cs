@@ -17,11 +17,11 @@ namespace OnlineShop.Data.InMemory
 
         public List<Order> GetAll() => _orders;
 
-        public Order? TryGetById(Guid orderId) => _orders.FirstOrDefault(order => order.Id == orderId);
+        public Order? TryGetById(Guid id) => _orders.FirstOrDefault(order => order.Id == id);
 
-        public void UpdateStatus(Guid orderId, OrderStatus newStatus)
+        public void UpdateStatus(Guid id, OrderStatus newStatus)
         {
-            var existingOrder = TryGetById(orderId);
+            var existingOrder = TryGetById(id);
 
             if(existingOrder != null)
             {

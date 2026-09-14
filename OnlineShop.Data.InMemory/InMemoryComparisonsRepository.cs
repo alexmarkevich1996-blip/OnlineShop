@@ -34,7 +34,7 @@ namespace OnlineShop.Data.InMemory
                 }
             }
         }
-        public void Remove(int productId, string userId)
+        public void Remove(Guid productId, string userId)
         {
             var comparison = TryGetByUserId(userId);
 

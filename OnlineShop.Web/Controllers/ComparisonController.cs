@@ -11,7 +11,7 @@ namespace OnlineShop.Controllers
             return View(comparison);
         }
 
-        public IActionResult Add(int productId)
+        public IActionResult Add(Guid productId)
         {
             var product = productsRepository.TryGetById(productId);
 
@@ -25,7 +25,7 @@ namespace OnlineShop.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Remove(int productId)
+        public IActionResult Remove(Guid productId)
         {
             comparisonsRepository.Remove(productId, Constants.UserId);
 

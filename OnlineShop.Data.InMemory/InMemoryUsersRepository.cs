@@ -1,4 +1,5 @@
-﻿using OnlineShop.Core.Interfaces;
+﻿using OnlineShop.Core.DTO;
+using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 
 namespace OnlineShop.Data.InMemory

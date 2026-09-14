@@ -4,13 +4,12 @@ namespace OnlineShop.Core.Interfaces
 {
     public interface IProductsRepository
     {
-
         List<Product> GetAll();
-        Product? TryGetById(int id);
+        Product? TryGetById(Guid id);
         List<Product>? Search(string? query);
         void Add(Product product);
         void Edit(Product product);
-        void Delete(int id);
+        void Delete(Guid id);
 
     }
 }

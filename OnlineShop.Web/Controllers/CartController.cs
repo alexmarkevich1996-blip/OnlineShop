@@ -12,7 +12,7 @@ namespace OnlineShop.Controllers
             return View(cart);
         }
 
-        public IActionResult Add(int productId)
+        public IActionResult Add(Guid productId)
         {
             var product = productsRepository.TryGetById(productId);
 
@@ -24,7 +24,7 @@ namespace OnlineShop.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Subtract(int productId)
+        public IActionResult Subtract(Guid productId)
         {
             cartsRepository.Subtract(productId, Constants.UserId);
 

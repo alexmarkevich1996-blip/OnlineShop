@@ -30,7 +30,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(Guid id)
         {
             var productForEditting = productsRepository.TryGetById(id);
 
@@ -50,7 +50,7 @@ namespace OnlineShop.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(int id)
+        public IActionResult Delete(Guid id)
         {
             productsRepository.Delete(id);
 

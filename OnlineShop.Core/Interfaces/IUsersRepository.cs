@@ -1,4 +1,5 @@
-﻿using OnlineShop.Core.Models;
+﻿using OnlineShop.Core.DTO;
+using OnlineShop.Core.Models;
 
 namespace OnlineShop.Core.Interfaces
 {

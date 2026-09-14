@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.Areas.Admin.ViewModels;
+using OnlineShop.Core.DTO;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 

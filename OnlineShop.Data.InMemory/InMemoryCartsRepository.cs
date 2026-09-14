@@ -58,7 +58,7 @@ namespace OnlineShop.Data.InMemory
                 }
             }
         }
-        public void Subtract(int productId, string userId)
+        public void Subtract(Guid productId, string userId)
         {
             var existingCart = TryGetByUserId(userId);
             var existingCartItem = existingCart.Items.FirstOrDefault(item => item.Product.Id == productId);

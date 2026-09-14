@@ -8,7 +8,7 @@ namespace OnlineShop.Core.Interfaces
 
         void Add(Product product, string userId);
 
-        void Subtract(int productId, string userId);
+        void Subtract(Guid productId, string userId);
         void Clear(string userId);
     }
 }

@@ -5,7 +5,7 @@ namespace OnlineShop.Controllers
 {
     public class ProductController(IProductsRepository productsRepository) : Controller
     {
-        public IActionResult Index(int id)
+        public IActionResult Index(Guid id)
         {
             var product = productsRepository.TryGetById(id);
 

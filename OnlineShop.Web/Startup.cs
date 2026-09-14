@@ -1,6 +1,8 @@
-﻿using OnlineShop.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineShop.Core.Interfaces;
 using Serilog;
 using OnlineShop.Data.InMemory;
+using OnlineShop.Data.MSSqlServer;
 
 namespace OnlineShop
 {
@@ -15,8 +17,12 @@ namespace OnlineShop
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DatabaseContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            
             services.AddSingleton<ICartsRepository, InMemoryCartsRepository>();
-            services.AddSingleton<IProductsRepository, InMemoryProductsRepository>();
+            services.AddTransient<IProductsRepository, ProductsDbRepository>();
             services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();
             services.AddSingleton<IComparisonsRepository, InMemoryComparisonsRepository>();

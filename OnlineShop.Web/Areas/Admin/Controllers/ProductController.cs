@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 
@@ -10,8 +11,22 @@ namespace OnlineShop.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var products = productsRepository.GetAll();
+            
+            var productsViewModels = new List<ProductViewModel>();
+            foreach (var product in products)
+            {
+                var productViewModels = new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Cost = product.Cost,
+                    Description = product.Description,
+                    PhotoPath = product.PhotoPath
+                };
+                productsViewModels.Add(productViewModels);
+            }
 
-            return View(products);
+            return View(productsViewModels);
         }
 
         public IActionResult Add()
@@ -19,14 +34,19 @@ namespace OnlineShop.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Add(Product product)
+        public IActionResult Add(ProductViewModel product)
         {
             if (!ModelState.IsValid)
-            {
                 return View(product);
-            }
 
-            productsRepository.Add(product);
+            var productDb = new Product
+            {
+                Name = product.Name,
+                Cost = product.Cost,
+                Description = product.Description
+            };
+
+            productsRepository.Add(productDb);
             return RedirectToAction(nameof(Index));
         }
 
@@ -38,14 +58,19 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Edit(ProductViewModel product)
         {
             if (!ModelState.IsValid)
-            {
                 return View(product);
-            }
+            
+            var productDb = new Product
+            {
+                Name = product.Name,
+                Cost = product.Cost,
+                Description = product.Description
+            };
 
-            productsRepository.Edit(product);
+            productsRepository.Edit(productDb);
 
             return RedirectToAction(nameof(Index));
         }

@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
+      <UserSecretsId>a2f3f247-fad0-4f07-b068-9decaf50a00b</UserSecretsId>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>OnlineShop</RootNamespace>
@@ -19,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\OnlineShop.Core\OnlineShop.Core.csproj" />
     <ProjectReference Include="..\OnlineShop.Data.InMemory\OnlineShop.Data.InMemory.csproj" />
+    <ProjectReference Include="..\OnlineShop.Data.MSSqlServer\OnlineShop.Data.MSSqlServer.csproj" />
   </ItemGroup>
 
 </Project>

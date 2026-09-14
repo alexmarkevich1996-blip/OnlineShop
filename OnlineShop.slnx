@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="OnlineShop/OnlineShop.csproj" />
+  <Project Path="OnlineShop.Core\OnlineShop.Core.csproj" Type="Classic C#" />
+  <Project Path="OnlineShop.Data.InMemory\OnlineShop.Data.InMemory.csproj" Type="Classic C#" />
+  <Project Path="OnlineShop.Web\OnlineShop.Web.csproj" />
 </Solution>

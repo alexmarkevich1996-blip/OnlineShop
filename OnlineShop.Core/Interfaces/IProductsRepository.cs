@@ -1,0 +1,16 @@
+﻿using OnlineShop.Core.Models;
+
+namespace OnlineShop.Core.Interfaces
+{
+    public interface IProductsRepository
+    {
+
+        List<Product> GetAll();
+        Product? TryGetById(int id);
+        List<Product>? Search(string? query);
+        void Add(Product product);
+        void Edit(Product product);
+        void Delete(int id);
+
+    }
+}

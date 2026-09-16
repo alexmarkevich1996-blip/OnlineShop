@@ -9,6 +9,7 @@ public class DatabaseContext : DbContext
     public DbSet<CartItem> CartItems { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<Favorite> Favorites { get; set; }
+    public DbSet<Comparison> Comparisons { get; set; }
 
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
@@ -18,6 +19,10 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Favorite>()
+            .HasMany(f => f.Items)
+            .WithMany();
+        
+        modelBuilder.Entity<Comparison>()
             .HasMany(f => f.Items)
             .WithMany();
     }

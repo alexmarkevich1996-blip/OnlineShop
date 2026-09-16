@@ -3,6 +3,7 @@ using OnlineShop.Core.Interfaces;
 using Serilog;
 using OnlineShop.Data.InMemory;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.Data.MSSqlServer.Repositories;
 
 namespace OnlineShop
 {
@@ -23,7 +24,7 @@ namespace OnlineShop
             
             services.AddTransient<ICartsRepository, CartsDbRepository>();
             services.AddTransient<IProductsRepository, ProductsDbRepository>();
-            services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
+            services.AddTransient<IOrdersRepository, OrdersDbRepository>();
             services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
             services.AddTransient<IComparisonsRepository, ComparisonsDbRepository>();
             services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();

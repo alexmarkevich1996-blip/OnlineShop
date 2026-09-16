@@ -1,7 +1,7 @@
 ﻿using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 
-namespace OnlineShop.Data.MSSqlServer
+namespace OnlineShop.Data.MSSqlServer.Repositories
 {
     public class ProductsDbRepository(DatabaseContext dbContext) : IProductsRepository
     {

@@ -36,7 +36,6 @@ namespace OnlineShop.Data.MSSqlServer
         }
         public void Add(Product product)
         {
-            product.Id = Guid.NewGuid();
             dbContext.Products.Add(product);
             
             dbContext.SaveChanges();

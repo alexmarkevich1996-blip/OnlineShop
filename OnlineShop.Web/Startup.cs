@@ -21,7 +21,7 @@ namespace OnlineShop
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             
-            services.AddSingleton<ICartsRepository, InMemoryCartsRepository>();
+            services.AddTransient<ICartsRepository, CartsDbRepository>();
             services.AddTransient<IProductsRepository, ProductsDbRepository>();
             services.AddSingleton<IOrdersRepository, InMemoryOrdersRepository>();
             services.AddSingleton<IFavoritesRepository, InMemoryFavoritesRepository>();

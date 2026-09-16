@@ -10,7 +10,11 @@ namespace OnlineShop.Core.Models
         public string? Description { get; set; } 
         public string PhotoPath { get; set; } = "/img/anyProduct.png ";
         
-        public Product() { }
+        public List<CartItem> CartItems { get; set; } = new();
+
+        public Product()
+        {
+        }
 
         public Product(Guid id, string name, decimal cost, string? description)
         {

@@ -1,22 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace OnlineShop.Core.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public Guid Id { get; set; }
-
         [Display(Name = "Login", Prompt = "Your login")]
         [Required(ErrorMessage = "Login not specified")]
         [EmailAddress(ErrorMessage = "Enter valid email")]
         [StringLength(30, MinimumLength = 5, ErrorMessage = "Login should be from {2} to {1} symbols")]
         [DataType(DataType.EmailAddress)]
         public string Login { get; set; }
-
-        [Display(Name = "Password", Prompt = "Your password")]
-        [Required(ErrorMessage = "Password not specified")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
 
         [Required(ErrorMessage = "Name not specified")]
         [StringLength(25, MinimumLength = 2, ErrorMessage = "Name should be from {2} to {1} symbols")]

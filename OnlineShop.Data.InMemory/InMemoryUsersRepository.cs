@@ -20,7 +20,7 @@ namespace OnlineShop.Data.InMemory
 
         public void Add(User user)
         {
-            user.Id = Guid.NewGuid();
+            user.Id = Guid.NewGuid().ToString();
             user.Role = rolesRepository.TryGetByName("User");
             user.CreationDateTime = DateTime.Now;
             users.Add(user);
@@ -41,12 +41,6 @@ namespace OnlineShop.Data.InMemory
 
         public void ChangePassword(ChangedPassword password)
         {
-            var existingUser = TryGetByLogin(password.Login);
-
-            if(existingUser != null)
-            {
-                existingUser.Password = password.Password;
-            }
         }
 
         public void Delete(string login)

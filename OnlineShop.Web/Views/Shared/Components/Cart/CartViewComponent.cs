@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
+using OnlineShop.Data.MSSqlServer;
 
 namespace OnlineShop.Views.Shared.Components.Cart
 {

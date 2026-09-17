@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Core.Interfaces;
+using OnlineShop.Core.Models;
 using Serilog;
 using OnlineShop.Data.InMemory;
 using OnlineShop.Data.MSSqlServer;
@@ -21,6 +23,25 @@ namespace OnlineShop
             services.AddDbContext<DatabaseContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<IdentityContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>();
+            
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ExpireTimeSpan = TimeSpan.FromHours(8);
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+
+                options.Cookie = new CookieBuilder
+                {
+                    IsEssential = true
+                };
+            });
             
             services.AddTransient<ICartsRepository, CartsDbRepository>();
             services.AddTransient<IProductsRepository, ProductsDbRepository>();
@@ -38,6 +59,13 @@ namespace OnlineShop
             {
                 var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
                 context.Database.Migrate();
+
+                var identityContext = scope.ServiceProvider.GetRequiredService<IdentityContext>();
+                identityContext.Database.Migrate();
+
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                IdentityInitializer.Initialize(userManager, roleManager);
             }
 
             app.UseDeveloperExceptionPage();
@@ -48,6 +76,9 @@ namespace OnlineShop
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

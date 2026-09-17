@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
+using OnlineShop.Data.MSSqlServer;
 
 namespace OnlineShop.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area(Constants.AdminRoleName)]
+    [Authorize(Roles = Constants.AdminRoleName)]
     public class ProductController(IProductsRepository productsRepository) : Controller
     {
         public IActionResult Index()

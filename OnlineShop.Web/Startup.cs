@@ -34,6 +34,12 @@ namespace OnlineShop
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)
         {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                context.Database.Migrate();
+            }
+
             app.UseDeveloperExceptionPage();
 
             app.UseSerilogRequestLogging();

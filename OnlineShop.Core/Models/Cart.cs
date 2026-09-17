@@ -8,6 +8,7 @@ namespace OnlineShop.Core.Models
         public Guid Id { get; set; }
         public string UserId { get; set; }
         public List<CartItem> Items { get; set; }
+        public DateTime CreatedDateTime { get; set; }
         
         [NotMapped]
         public decimal TotalCost => Items.Sum(x => x.Cost);
@@ -17,6 +18,7 @@ namespace OnlineShop.Core.Models
         public Cart()
         {
             Items = new List<CartItem>();
+            CreatedDateTime = DateTime.Now;
         }
     }
 }

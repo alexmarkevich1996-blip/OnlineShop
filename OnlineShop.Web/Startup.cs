@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
@@ -47,7 +48,10 @@ namespace OnlineShop
             services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
             services.AddTransient<IComparisonsRepository, ComparisonsDbRepository>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)

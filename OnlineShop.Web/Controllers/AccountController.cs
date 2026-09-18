@@ -24,7 +24,6 @@ namespace OnlineShop.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Authorization auth)
         {
             if (ModelState.IsValid)
@@ -41,7 +40,6 @@ namespace OnlineShop.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -54,7 +52,6 @@ namespace OnlineShop.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Registration registration)
         {
             if(registration.Login == registration.Password)

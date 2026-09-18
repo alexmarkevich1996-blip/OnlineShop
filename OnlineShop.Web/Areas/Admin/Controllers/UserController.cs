@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Core.DTO;
-using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
 
@@ -11,17 +11,24 @@ namespace OnlineShop.Areas.Admin.Controllers
 {
     [Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
-    public class UserController(IUsersRepository usersRepository, IRolesRepository rolesRepository) : Controller
+    public class UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager) : Controller
     {
         public IActionResult Index()
         {
-            var users = usersRepository.GetAll();
+            var users = userManager.Users.ToList();
             return View(users);
         }
 
-        public IActionResult Detail(string login)
+        public async Task<IActionResult> Detail(string login)
         {
-            var user = usersRepository.TryGetByLogin(login);
+            var user = await userManager.FindByNameAsync(login);
+
+            if (user != null)
+            {
+                var roles = await userManager.GetRolesAsync(user);
+                ViewData["CurrentRole"] = roles.FirstOrDefault();
+            }
+
             return View(user);
         }
 
@@ -31,106 +38,160 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(User user)
+        public async Task<IActionResult> Add(AddUser model)
         {
-            if (usersRepository.TryGetByLogin(user.Login) != null)
-                ModelState.AddModelError("", "That user already exists!");
-
             if (!ModelState.IsValid)
-                return View(user);
+                return View(model);
 
-            usersRepository.Add(user);
+            var user = new User
+            {
+                UserName = model.Login,
+                Email = model.Login,
+                Login = model.Login,
+                Name = model.Name,
+                Surname = model.Surname,
+                Age = model.Age,
+                Phone = model.Phone,
+                CreationDateTime = DateTime.Now
+            };
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
+
+                return View(model);
+            }
+
+            await userManager.AddToRoleAsync(user, Constants.UserRoleName);
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Edit(string login)
+        public async Task<IActionResult> Edit(string login)
         {
-            var userAccount = usersRepository.TryGetByLogin(login);
+            var userAccount = await userManager.FindByNameAsync(login);
 
             return View(userAccount);
         }
 
         [HttpPost]
-        public IActionResult Edit(User user)
+        public async Task<IActionResult> Edit(User user)
         {
             if (!ModelState.IsValid)
                 return View(user);
 
-            usersRepository.Edit(user);
+            var existingUser = await userManager.FindByNameAsync(user.Login);
+
+            if (existingUser != null)
+            {
+                existingUser.Name = user.Name;
+                existingUser.Surname = user.Surname;
+                existingUser.Age = user.Age;
+                existingUser.Phone = user.Phone;
+
+                await userManager.UpdateAsync(existingUser);
+            }
 
             return RedirectToAction(nameof(Detail), new { login = user.Login });
         }
 
-        public IActionResult ChangePassword(string login)
+        public async Task<IActionResult> ChangePassword(string login)
         {
-            var user = usersRepository.TryGetByLogin(login);
+            var user = await userManager.FindByNameAsync(login);
 
             var model = new ChangedPassword
             {
-                Login = user.Login
+                Login = user?.Login
             };
 
             return View(model);
-
         }
 
         [HttpPost]
-        public IActionResult ChangePassword(ChangedPassword changedPassword)
+        public async Task<IActionResult> ChangePassword(ChangedPassword changedPassword)
         {
             if (changedPassword.Login == changedPassword.Password)
                 ModelState.AddModelError("", "Login and password should not match");
-            
+
             if (changedPassword.Password != changedPassword.ConfirmPassword)
                 ModelState.AddModelError("", "Passwords do not match");
 
             if (!ModelState.IsValid)
                 return View(changedPassword);
 
-            usersRepository.ChangePassword(changedPassword);
+            var user = await userManager.FindByNameAsync(changedPassword.Login);
+
+            if (user != null)
+            {
+                var token = await userManager.GeneratePasswordResetTokenAsync(user);
+                var result = await userManager.ResetPasswordAsync(user, token, changedPassword.Password);
+
+                if (!result.Succeeded)
+                {
+                    foreach (var error in result.Errors)
+                        ModelState.AddModelError("", error.Description);
+
+                    return View(changedPassword);
+                }
+            }
 
             return RedirectToAction(nameof(Detail), new { login = changedPassword.Login });
         }
 
-        public IActionResult Delete(string login)
+        public async Task<IActionResult> Delete(string login)
         {
-            usersRepository.Delete(login);
+            var user = await userManager.FindByNameAsync(login);
+
+            if (user != null)
+            {
+                await userManager.DeleteAsync(user);
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult ChangeRole(string login)
+        public async Task<IActionResult> ChangeRole(string login)
         {
-            var existingUser = usersRepository.TryGetByLogin(login);
+            var existingUser = await userManager.FindByNameAsync(login);
+            var currentRoles = existingUser != null
+                ? await userManager.GetRolesAsync(existingUser)
+                : [];
 
             var changeRole = new ChangeRole()
             {
                 Login = existingUser?.Login,
-                Role = existingUser?.Role?.ToString(),
-                Roles = rolesRepository
-                    .GetAll()
+                Role = currentRoles.FirstOrDefault(),
+                Roles = roleManager.Roles
                     .Select(role => new SelectListItem()
-                        {
-                            Value = role.Name.ToString(),
-                            Text = role.Name
-                        })
+                    {
+                        Value = role.Name,
+                        Text = role.Name
+                    })
                     .ToList()
-
             };
 
             return View(changeRole);
         }
 
         [HttpPost]
-        public IActionResult ChangeRole(ChangeRole changeRole)
+        public async Task<IActionResult> ChangeRole(ChangeRole changeRole)
         {
             if (!ModelState.IsValid)
                 return View(changeRole);
 
-            usersRepository.ChangeRole(changeRole.Login, rolesRepository.TryGetByName(changeRole.Role));
+            var user = await userManager.FindByNameAsync(changeRole.Login);
+
+            if (user != null)
+            {
+                var currentRoles = await userManager.GetRolesAsync(user);
+                await userManager.RemoveFromRolesAsync(user, currentRoles);
+                await userManager.AddToRoleAsync(user, changeRole.Role);
+            }
 
             return RedirectToAction(nameof(Detail), new { login = changeRole.Login });
         }
-
     }
 }

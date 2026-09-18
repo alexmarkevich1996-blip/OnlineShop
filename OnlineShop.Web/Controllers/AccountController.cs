@@ -9,24 +9,22 @@ namespace OnlineShop.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUsersRepository _usersRepository;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
 
-        public AccountController(IUsersRepository usersRepository, UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _usersRepository = usersRepository;
             _userManager = userManager;
             _signInManager = signInManager;
         }
 
         public IActionResult Login()
         {
-
             return View();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Authorization auth)
         {
             if (ModelState.IsValid)
@@ -56,6 +54,7 @@ namespace OnlineShop.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(Registration registration)
         {
             if(registration.Login == registration.Password)

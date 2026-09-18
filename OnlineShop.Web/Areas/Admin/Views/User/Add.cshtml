@@ -1,4 +1,4 @@
-﻿@model OnlineShop.Core.Models.User
+﻿@model OnlineShop.Areas.Admin.ViewModels.AddUser
 @{
     ViewData["Title"] = "Add new user";
 }
@@ -15,6 +15,11 @@
                 <label class="form-label" asp-for="Login"></label><br />
                 <input class="form-control" asp-for="Login" />
                 <span asp-validation-for="Login"></span>
+            </p>
+            <p>
+                <label class="form-label" asp-for="Password"></label><br />
+                <input class="form-control" asp-for="Password" />
+                <span asp-validation-for="Password"></span>
             </p>
             <p>
                 <label class="form-label" asp-for="Name"></label><br />

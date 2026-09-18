@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Core.Interfaces;
-using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
 
 namespace OnlineShop.Areas.Admin.Controllers
 {
     [Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
-    public class RoleController(IRolesRepository rolesRepository) : Controller
+    public class RoleController(RoleManager<IdentityRole> roleManager) : Controller
     {
         public IActionResult Index()
         {
-            var roles = rolesRepository.GetAll();
+            var roles = roleManager.Roles.ToList();
             return View(roles);
         }
 
@@ -22,29 +21,36 @@ namespace OnlineShop.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add(Role role)
+        public async Task<IActionResult> Add(IdentityRole role)
         {
-            if(rolesRepository.TryGetByName(role.Name) != null)
-            {
-                ModelState.AddModelError("", "This role is already exists!");
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(role);
             }
 
-            rolesRepository.Add(role);
+            var result = await roleManager.CreateAsync(new IdentityRole(role.Name));
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
+
+                return View(role);
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Delete(Guid roleId)
+        public async Task<IActionResult> Delete(string roleId)
         {
-            rolesRepository.Delete(roleId);
+            var role = await roleManager.FindByIdAsync(roleId);
+
+            if (role != null)
+            {
+                await roleManager.DeleteAsync(role);
+            }
 
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

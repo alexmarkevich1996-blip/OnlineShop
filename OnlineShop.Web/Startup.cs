@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using Serilog;
-using OnlineShop.Data.InMemory;
 using OnlineShop.Data.MSSqlServer;
 using OnlineShop.Data.MSSqlServer.Repositories;
 
@@ -11,12 +10,11 @@ namespace OnlineShop
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -48,8 +46,7 @@ namespace OnlineShop
             services.AddTransient<IOrdersRepository, OrdersDbRepository>();
             services.AddTransient<IFavoritesRepository, FavoritesDbRepository>();
             services.AddTransient<IComparisonsRepository, ComparisonsDbRepository>();
-            services.AddSingleton<IRolesRepository, InMemoryRolesRepository>();
-            services.AddSingleton<IUsersRepository, InMemoryUsersRepository>();
+
             services.AddControllersWithViews();
         }
 

@@ -15,7 +15,19 @@ namespace OnlineShop.Areas.Admin.Controllers
     {
         public IActionResult Index()
         {
-            var users = userManager.Users.ToList();
+            var users = userManager.Users
+                .Select(user => new UserViewModel
+                {
+                    Id = user.Id,
+                    Login = user.Login,
+                    Name = user.Name,
+                    Surname = user.Surname,
+                    Age = user.Age,
+                    Phone = user.Phone,
+                    CreationDateTime = user.CreationDateTime
+                })
+                .ToList();
+
             return View(users);
         }
 
@@ -23,13 +35,24 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             var user = await userManager.FindByNameAsync(login);
 
-            if (user != null)
-            {
-                var roles = await userManager.GetRolesAsync(user);
-                ViewData["CurrentRole"] = roles.FirstOrDefault();
-            }
+            if (user == null)
+                return View((UserViewModel?)null);
 
-            return View(user);
+            var roles = await userManager.GetRolesAsync(user);
+
+            var model = new UserViewModel
+            {
+                Id = user.Id,
+                Login = user.Login,
+                Name = user.Name,
+                Surname = user.Surname,
+                Age = user.Age,
+                Phone = user.Phone,
+                Role = roles.FirstOrDefault(),
+                CreationDateTime = user.CreationDateTime
+            };
+
+            return View(model);
         }
 
         public IActionResult Add()
@@ -72,30 +95,44 @@ namespace OnlineShop.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(string login)
         {
-            var userAccount = await userManager.FindByNameAsync(login);
+            var user = await userManager.FindByNameAsync(login);
 
-            return View(userAccount);
+            if (user == null)
+                return View((UserViewModel?)null);
+
+            var model = new UserViewModel
+            {
+                Id = user.Id,
+                Login = user.Login,
+                Name = user.Name,
+                Surname = user.Surname,
+                Age = user.Age,
+                Phone = user.Phone,
+                CreationDateTime = user.CreationDateTime
+            };
+
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(User user)
+        public async Task<IActionResult> Edit(UserViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(user);
+                return View(model);
 
-            var existingUser = await userManager.FindByNameAsync(user.Login);
+            var existingUser = await userManager.FindByNameAsync(model.Login);
 
             if (existingUser != null)
             {
-                existingUser.Name = user.Name;
-                existingUser.Surname = user.Surname;
-                existingUser.Age = user.Age;
-                existingUser.Phone = user.Phone;
+                existingUser.Name = model.Name;
+                existingUser.Surname = model.Surname;
+                existingUser.Age = model.Age;
+                existingUser.Phone = model.Phone;
 
                 await userManager.UpdateAsync(existingUser);
             }
 
-            return RedirectToAction(nameof(Detail), new { login = user.Login });
+            return RedirectToAction(nameof(Detail), new { login = model.Login });
         }
 
         public async Task<IActionResult> ChangePassword(string login)

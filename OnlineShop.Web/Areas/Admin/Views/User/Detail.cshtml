@@ -1,6 +1,5 @@
 ﻿@using OnlineShop.Areas.Admin.ViewModels
-@using OnlineShop.Core.Models
-@model User
+@model UserViewModel
 @{
     ViewData["Title"] = "User Detail";
 }
@@ -90,7 +89,7 @@
                     </tr>
                     <tr>
                         <td><span>Role</span></td>
-                        <td>@ViewData["CurrentRole"]</td>
+                        <td>@Model.Role</td>
                     </tr>
                     <tr>
                         <td class="w-25"><span>Registration date</span></td>

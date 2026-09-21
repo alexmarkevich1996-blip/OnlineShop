@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.ViewModels;
 
 namespace OnlineShop.Controllers
 {
@@ -11,7 +12,13 @@ namespace OnlineShop.Controllers
         public IActionResult Index()
         {
             var favorite = favoritesRepository.TryGetByUserId(Constants.UserId);
-            return View(favorite);
+
+            var model = new FavoriteViewModel
+            {
+                Items = favorite?.Items ?? []
+            };
+
+            return View(model);
         }
 
         public IActionResult Add(Guid productId)

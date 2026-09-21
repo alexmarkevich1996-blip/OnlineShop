@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
@@ -12,7 +13,9 @@ namespace OnlineShop.Areas.Admin.Controllers
     {
         public IActionResult Index()
         {
-            var orders = ordersRepository.GetAll();
+            var orders = ordersRepository.GetAll()
+                .Select(ToViewModel)
+                .ToList();
 
             return View(orders);
         }
@@ -21,8 +24,20 @@ namespace OnlineShop.Areas.Admin.Controllers
         {
             var order = ordersRepository.TryGetById(orderId);
 
-            return View(order);
+            return View(order == null ? null : ToViewModel(order));
         }
+
+        private static OrderViewModel ToViewModel(Order order) => new()
+        {
+            Id = order.Id,
+            UserId = order.UserId,
+            TotalCost = order.TotalCost,
+            ItemsQuantity = order.ItemsQuantity,
+            Status = order.Status,
+            CreationDateTime = order.CreationDateTime,
+            DeliveryUser = order.DeliveryUser,
+            Items = order.Items
+        };
 
         [HttpPost]
         public IActionResult UpdateStatus(Guid orderId, OrderStatus status)

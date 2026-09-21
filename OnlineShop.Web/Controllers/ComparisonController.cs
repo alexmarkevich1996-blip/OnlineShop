@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.ViewModels;
 
 namespace OnlineShop.Controllers
 {
@@ -9,7 +10,13 @@ namespace OnlineShop.Controllers
         public IActionResult Index()
         {
             var comparison = comparisonsRepository.TryGetByUserId(Constants.UserId);
-            return View(comparison);
+
+            var model = new ComparisonViewModel
+            {
+                Items = comparison?.Items ?? []
+            };
+
+            return View(model);
         }
 
         public IActionResult Add(Guid productId)

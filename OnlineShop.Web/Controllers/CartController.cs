@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.ViewModels;
 
 namespace OnlineShop.Controllers
 {
@@ -12,7 +13,13 @@ namespace OnlineShop.Controllers
         public IActionResult Index()
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
-            return View(cart);
+
+            var model = new CartViewModel
+            {
+                Items = cart?.Items ?? []
+            };
+
+            return View(model);
         }
 
         public IActionResult Add(Guid productId)

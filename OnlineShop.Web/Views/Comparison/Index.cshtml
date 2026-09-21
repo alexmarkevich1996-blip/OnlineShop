@@ -1,4 +1,4 @@
-﻿@model OnlineShop.Core.Models.Comparison
+﻿@model OnlineShop.ViewModels.ComparisonViewModel
 @{
     ViewData["Title"] = "Product comparison";
 }
@@ -7,7 +7,7 @@
     <h2 class="row-title">Product comparison</h2>
 </div>
 
-@if (Model != null && Model.Items?.Count > 0)
+@if (Model.Items.Count > 0)
 {
     <div class="row justify-content-center mt-3">
         @foreach (var product in Model.Items)

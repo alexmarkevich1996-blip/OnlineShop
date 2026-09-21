@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.ViewModels;
 
 namespace OnlineShop.Controllers
 {
@@ -13,31 +14,43 @@ namespace OnlineShop.Controllers
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
 
-            var order = new Order
+            var model = new PlaceOrder
             {
                 Items = cart?.Items ?? []
             };
 
-            return View(order);
+            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Buy(Order order)
+        public IActionResult Buy(PlaceOrder model)
         {
             var cart = cartsRepository.TryGetByUserId(Constants.UserId);
 
-            if(cart is null)
+            if (cart is null || cart.Items.Count == 0)
             {
-                return View(nameof(Index), order); 
+                model.Items = cart?.Items ?? [];
+                return View(nameof(Index), model);
             }
-            order.UserId = Constants.UserId;
-            order.Items = cart.Items;
+
+            if (!ModelState.IsValid)
+            {
+                model.Items = cart.Items;
+                return View(nameof(Index), model);
+            }
+
+            var order = new Order
+            {
+                UserId = Constants.UserId,
+                Items = cart.Items,
+                DeliveryUser = model.DeliveryUser,
+                Status = OrderStatus.Created
+            };
 
             ordersRepository.Add(order);
             cartsRepository.Clear(Constants.UserId);
 
-
-            return RedirectToAction("Success"); 
+            return RedirectToAction("Success");
         }
 
         public IActionResult Success()

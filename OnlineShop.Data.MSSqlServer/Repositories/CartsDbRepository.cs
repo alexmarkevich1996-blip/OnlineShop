@@ -53,6 +53,7 @@ namespace OnlineShop.Data.MSSqlServer.Repositories
                     existingCartItem.Quantity++;
                 }
             }
+            
             dbContext.SaveChanges();
         }
         public void Subtract(Guid productId, string userId)

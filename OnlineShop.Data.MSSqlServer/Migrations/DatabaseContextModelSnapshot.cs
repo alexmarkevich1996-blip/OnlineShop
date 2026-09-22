@@ -34,7 +34,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("CartItemOrder");
+                    b.ToTable("CartItemOrder", (string)null);
                 });
 
             modelBuilder.Entity("ComparisonProduct", b =>
@@ -49,7 +49,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasIndex("ItemsId");
 
-                    b.ToTable("ComparisonProduct");
+                    b.ToTable("ComparisonProduct", (string)null);
                 });
 
             modelBuilder.Entity("FavoriteProduct", b =>
@@ -64,7 +64,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasIndex("ItemsId");
 
-                    b.ToTable("FavoriteProduct");
+                    b.ToTable("FavoriteProduct", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.Cart", b =>
@@ -82,7 +82,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.CartItem", b =>
@@ -106,7 +106,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.Comparison", b =>
@@ -121,7 +121,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comparisons");
+                    b.ToTable("Comparisons", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.DeliveryUser", b =>
@@ -154,7 +154,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeliveryUser");
+                    b.ToTable("DeliveryUser", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.Favorite", b =>
@@ -169,7 +169,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Favorites");
+                    b.ToTable("Favorites", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.Order", b =>
@@ -195,7 +195,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasIndex("DeliveryUserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("OnlineShop.Core.Models.Product", b =>
@@ -221,7 +221,7 @@ namespace OnlineShop.Data.MSSqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new

@@ -1,14 +1,16 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.Validators;
 using OnlineShop.ViewModels;
 
 namespace OnlineShop.Controllers
 {
     [Authorize]
-    public class OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository) : Controller
+    public class OrderController(ICartsRepository cartsRepository, IOrdersRepository ordersRepository, IValidator<PlaceOrder> placeOrderValidator) : Controller
     {
         public IActionResult Index()
         {
@@ -32,6 +34,9 @@ namespace OnlineShop.Controllers
                 model.Items = cart?.Items ?? [];
                 return View(nameof(Index), model);
             }
+
+            var validationResult = placeOrderValidator.Validate(model);
+            ModelState.AddValidationErrors(validationResult);
 
             if (!ModelState.IsValid)
             {

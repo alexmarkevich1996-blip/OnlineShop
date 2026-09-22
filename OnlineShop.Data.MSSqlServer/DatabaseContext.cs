@@ -75,5 +75,13 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Order>()
             .HasMany(o => o.Items)
             .WithMany();
+
+        modelBuilder.Entity<DeliveryUser>(builder =>
+        {
+            builder.Property(d => d.Name).HasMaxLength(25);
+            builder.Property(d => d.Address).HasMaxLength(100);
+            builder.Property(d => d.Phone).HasMaxLength(16);
+            builder.Property(d => d.Comment).HasMaxLength(512);
+        });
     }
 }

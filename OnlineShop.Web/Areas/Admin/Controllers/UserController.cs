@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,12 +7,19 @@ using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Core.DTO;
 using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.Validators;
 
 namespace OnlineShop.Areas.Admin.Controllers
 {
     [Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
-    public class UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager) : Controller
+    public class UserController(
+        UserManager<User> userManager,
+        RoleManager<IdentityRole> roleManager,
+        IValidator<AddUser> addUserValidator,
+        IValidator<UserViewModel> userViewModelValidator,
+        IValidator<ChangedPassword> changedPasswordValidator,
+        IValidator<ChangeRole> changeRoleValidator) : Controller
     {
         public IActionResult Index()
         {
@@ -63,6 +71,9 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddUser model)
         {
+            var validationResult = await addUserValidator.ValidateAsync(model);
+            ModelState.AddValidationErrors(validationResult);
+
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -117,6 +128,9 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UserViewModel model)
         {
+            var validationResult = await userViewModelValidator.ValidateAsync(model);
+            ModelState.AddValidationErrors(validationResult);
+
             if (!ModelState.IsValid)
                 return View(model);
 
@@ -150,11 +164,8 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangedPassword changedPassword)
         {
-            if (changedPassword.Login == changedPassword.Password)
-                ModelState.AddModelError("", "Login and password should not match");
-
-            if (changedPassword.Password != changedPassword.ConfirmPassword)
-                ModelState.AddModelError("", "Passwords do not match");
+            var validationResult = await changedPasswordValidator.ValidateAsync(changedPassword);
+            ModelState.AddValidationErrors(validationResult);
 
             if (!ModelState.IsValid)
                 return View(changedPassword);
@@ -216,6 +227,9 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeRole(ChangeRole changeRole)
         {
+            var validationResult = await changeRoleValidator.ValidateAsync(changeRole);
+            ModelState.AddValidationErrors(validationResult);
+
             if (!ModelState.IsValid)
                 return View(changeRole);
 

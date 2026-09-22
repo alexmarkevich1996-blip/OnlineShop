@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.Validators;
 
 namespace OnlineShop.Areas.Admin.Controllers
 {
     [Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
-    public class ProductController(IProductsRepository productsRepository) : Controller
+    public class ProductController(IProductsRepository productsRepository, IValidator<ProductViewModel> productValidator) : Controller
     {
         public IActionResult Index()
         {
@@ -39,6 +41,9 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Add(ProductViewModel product)
         {
+            var validationResult = productValidator.Validate(product);
+            ModelState.AddValidationErrors(validationResult);
+
             if (!ModelState.IsValid)
                 return View(product);
 
@@ -63,6 +68,9 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(ProductViewModel product)
         {
+            var validationResult = productValidator.Validate(product);
+            ModelState.AddValidationErrors(validationResult);
+
             if (!ModelState.IsValid)
                 return View(product);
             

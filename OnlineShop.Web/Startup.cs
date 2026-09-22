@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Core.Interfaces;
@@ -28,7 +29,8 @@ namespace OnlineShop
                     Configuration.GetConnectionString("DefaultConnection")));
             
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<IdentityContext>();
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();
             
             services.ConfigureApplicationCookie(options =>
             {
@@ -51,7 +53,10 @@ namespace OnlineShop
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
             });
+
+            services.AddValidatorsFromAssemblyContaining<Startup>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment environment)

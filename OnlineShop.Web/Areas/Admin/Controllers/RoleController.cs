@@ -1,14 +1,16 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Areas.Admin.ViewModels;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.Validators;
 
 namespace OnlineShop.Areas.Admin.Controllers
 {
     [Area(Constants.AdminRoleName)]
     [Authorize(Roles = Constants.AdminRoleName)]
-    public class RoleController(RoleManager<IdentityRole> roleManager) : Controller
+    public class RoleController(RoleManager<IdentityRole> roleManager, IValidator<RoleViewModel> roleViewModelValidator) : Controller
     {
         public IActionResult Index()
         {
@@ -31,6 +33,9 @@ namespace OnlineShop.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(RoleViewModel model)
         {
+            var validationResult = await roleViewModelValidator.ValidateAsync(model);
+            ModelState.AddValidationErrors(validationResult);
+
             if (!ModelState.IsValid)
             {
                 return View(model);

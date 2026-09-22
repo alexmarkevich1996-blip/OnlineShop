@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Core.Interfaces;
 using OnlineShop.Core.Models;
 using OnlineShop.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using OnlineShop.Data.MSSqlServer;
+using OnlineShop.Validators;
 
 namespace OnlineShop.Controllers
 {
@@ -11,11 +13,19 @@ namespace OnlineShop.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IValidator<Authorization> _authorizationValidator;
+        private readonly IValidator<Registration> _registrationValidator;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            IValidator<Authorization> authorizationValidator,
+            IValidator<Registration> registrationValidator)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _authorizationValidator = authorizationValidator;
+            _registrationValidator = registrationValidator;
         }
 
         public IActionResult Login()
@@ -26,6 +36,9 @@ namespace OnlineShop.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Authorization auth)
         {
+            var validationResult = await _authorizationValidator.ValidateAsync(auth);
+            ModelState.AddValidationErrors(validationResult);
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(auth.Login, auth.Password, auth.IsRememberMe, false);
@@ -54,11 +67,9 @@ namespace OnlineShop.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(Registration registration)
         {
-            if(registration.Login == registration.Password)
-            {
-                ModelState.AddModelError("", "Login and password should not match");
-            }
-       
+            var validationResult = await _registrationValidator.ValidateAsync(registration);
+            ModelState.AddValidationErrors(validationResult);
+
             if(!ModelState.IsValid)
                return View(registration);
 
